@@ -1,5 +1,5 @@
 Package name: graph2pro-var
-This package contains a wrapper script (graph2pro-var.sh) and component packages for two algorithms: 
+This package contains a wrapper script (conda_graph2pro-var.sh) and component packages for two algorithms: 
 graph2pro and var2pep for protein/peptide identification from metaproteomic mass spectral data with matching 
 metagenomic/transcriptomic data (i.e., meta-proteogenomic approach).
 The graph2pro approach is based on assembly graph for protein/peptide identification.
@@ -13,26 +13,36 @@ This work was supported by NIH grant 1R01AI108888 to YY and HT
 graph2pro-var is free software under the terms of the GNU General Public License as published by
 the Free Software Foundation.
 
+>> Installing a graph2pro-var environment
+If you don't have already have conda installed:  https://docs.conda.io/en/latest/miniconda.html
+
+Create the conda environment for graph2pro-var
+( https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html )
+conda create -n __graph2pro-var@1.0.0 graph2pro-var=1.0.0 --channel conda-forge --channel bioconda --channel defaults
+
+>> Activate the graph2pro-var conda environment
+( https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#id7 )
+    conda activate __graph2pro-var@1.0.0
+  OR if that doesn 't work:
+    source `which activate` __graph2pro-var@1.0.0
+  for example if miniconda3 was installed in home dir of user pat:
+    source /home/pat/miniconda3/bin/activate __graph2pro-var@1.0.0
+( https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#deactivating-an-environment )
+
 >> Package contents
-graph2pro-var.sh -- wrapper script for the package that can be called directly
-Graph2Pro -- programs for assembly graph based protein/peptide identification
-MSGF+ -- MS search engine
-FragGeneScan, bowtie2, RAPSearch2, cd-hit and pyscript -- folders contain programs/scripts for other purposes 
+conda_graph2pro-var.sh -- wrapper script for the package that can be called directly
+conda_summarize.sh -- script reports the number of spectra and unique peptides identified by the different approaches 
+    (contig only, graph2pro, graph2pro&var2pep).
+
 Tests folder, which contains a small dataset for testing the pipeline. 
    SML.par -- the parameter file
    other files, including the fastg and spectral files
-
->> Installation
-   If you run the pipeline on a linux machine, the pipeline probably works just fine. 
-   If not, you may need to recompile the tools included. 
-   We provide a script for recompiling the tools: 
-	 $./install
 
 >> Try a testing example (under Tests folder)
    Check readme file under the Tests folder for usage; all necessary files are provided in the same folder.
    Command to test the provided testing example:
    	$cd Tests
-        $nohup sh ../graph2pro-var.sh SML.par > SML.log &
+        $nohup sh ../conda_graph2pro-var.sh SML.par > SML.log &
    
    Notes:
        1) Included in this folder you can see SML.par, the parameter file that will be used by the wrapper script. 
@@ -63,20 +73,20 @@ Tests folder, which contains a small dataset for testing the pipeline.
               *.var2pep.tsv.0.01.tsv -- results from var2pep
 
 >> Try graph2pro & var2pep for your own datasets
-   As graph2pro-var.sh pipeline creates large intermediate result files in **current** folder,
+   As conda_graph2pro-var.sh pipeline creates large intermediate result files in **current** folder,
    we recommend that you create a dedicated working folder for each of your job, and work under that folder. 
 
    ** Prepare the parameter file for running the pipeline for your job.
       See SML.par under the Tests folder for an example.
       Copy and paste this file to your working folder, and revise the parameter file accordingly.
-      Please note the graph2pro-var.sh pipeline gets the input file names (fastg, MS data, reads files) from
+      Please note the conda_graph2pro-var.sh pipeline gets the input file names (fastg, MS data, reads files) from
       the parameter file. Make sure that you provide the paths for the input files in the parameter file, if
       the input files are not in the current folder.
 
-   ** Call graph2pro-var.sh (referring to the script with full path information) as following:
-         $path-to-the-wrapper-script/graph2pro-var.sh parameter-file 
+   ** Call conda_graph2pro-var.sh (referring to the script with full path information) as following:
+         $path-to-the-wrapper-script/conda_graph2pro-var.sh parameter-file 
          OR
-         $nohup sh path-to-the-wrapper-script/graph2pro-var.sh parameter-file > parameter-file.log &
+         $nohup sh path-to-the-wrapper-script/conda_graph2pro-var.sh parameter-file > parameter-file.log &
 
 >> How to prepare assembly graph?
    An important input to the pipeline is the assembly graph (in fastg format). 
@@ -94,7 +104,7 @@ Tests folder, which contains a small dataset for testing the pipeline.
 
 >> Use graph2pro only
    If you want to call only the graph2pro, but no var2pep for your dataset, you can simply do it by removing "reads=" parameter 
-   from the parameter file, and call the same wrapper script graph2pro-var.sh. For this case, only the fastg file (assembly graph) and
+   from the parameter file, and call the same wrapper script conda_graph2pro-var.sh. For this case, only the fastg file (assembly graph) and
    the spectral data, but not the reads files, will be needed as the inputs.
 
 >> Other option: cascaded search
@@ -108,6 +118,6 @@ Tests folder, which contains a small dataset for testing the pipeline.
    computer cluster uses qsub.
 
 >> Summarize the results (see example under Tests folder)
-   $path-to-the-wrapper-script/summarize.sh parameter-file(the same used by graph2pro-var.sh)
+   $path-to-the-wrapper-script/conda_summarize.sh parameter-file(the same used by conda_graph2pro-var.sh)
    This script reports the number of spectra and unique peptides identified by the different approaches 
     (contig only, graph2pro, graph2pro&var2pep).
