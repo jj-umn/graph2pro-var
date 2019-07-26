@@ -1,5 +1,6 @@
 id=SML_newFDR
 kmer=99
+mods=Mods_normal.txt
 fastg=k99.contigs.fastg
 ms=SML.mgf
 reads=-1 SML.1.fq -2 SML.2.fq -U SML.singleton.fq

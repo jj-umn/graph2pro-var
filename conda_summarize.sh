@@ -3,11 +3,11 @@ parfile=$1
 withhead=$2
 if [ -z $parfile ]; then
   echo "Error: parameter file not given"
-  exit
+  exit 1
 fi
 if [ ! -f $parfile ]; then
    echo "Error: $parfile NOT found"
-   exit
+   exit 1
 fi
 if [ -z $withhead ]; then
   withhead=true
@@ -26,17 +26,17 @@ for apar in "${par[@]}"; do
 done
 if [ -z $exp_d ]; then
   echo "Error: exp_d not found"
-  exit
+  exit 1
 fi
 if [ -z $mgf ]; then
   echo "Error: mgf not found"
-  exit
+  exit 1
 fi
 
 spec_count=`grep "BEGIN IONS" $mgf -c`
 if [ -z $exp_d ]; then
    echo "error: prefix of the filenames including the folder is needed"
-   exit
+   exit 1
 fi
 contig_info=`getUniquePeptides_files.py -i ${exp_d}.fgs.tsv.$fdr.tsv -b`
 other_info="NA NA NA NA NA NA"

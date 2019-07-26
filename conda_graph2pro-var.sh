@@ -17,7 +17,11 @@ pgm_d=$(dirname $(readlink -nf $0))
 if [ ! -z $pgmdir ]; then
    pgm_d=$pgmdir 
 fi
-mods=$pgm_d/MSGF+/Mods_normal.txt
+if [ -f "$pgm_d/MSGF+/Mods_normal.txt" ]; then
+    mods=$pgm_d/MSGF+/Mods_normal.txt
+else
+    mods=''
+fi
 
 parfile=$1
 if [ ! -z $par ]; then
@@ -25,20 +29,20 @@ if [ ! -z $par ]; then
 fi
 if [ -z $parfile ]; then
   echo "Error: parameter file not given";
-  exit;
+  exit 1
 fi
 if [ -f $parfile ]; then
    echo "$parfile found -- nice"
 else
    echo "$parfile NOT found -- pipeline terminated"
-   exit
+   exit 1
 fi
 #get parameters from input parfile
 IFS=$'\n'; set -f; par=($(<$parfile))
 n=${#par[@]}
 if [ $n -lt 5 ]; then
    echo "Error: wrong parameter file"
-   exit
+   exit 1
 fi
 thread=8
 ram="32g"
@@ -66,13 +70,23 @@ if [ -f $gnm ]; then
    echo "$gnm found"
 else
    echo "$gnm not found"
-   exit
+   exit 1
 fi
 if [ -f $mgf ]; then
    echo "$mgf found"
 else
    echo "$mgf not found"
-   exit
+   exit 1
+fi
+if [ -z $mods ]; then
+   echo "MSGF+ mods not specified"
+   exit 1
+fi
+if [ -f $mods ]; then
+   echo "$mods found"
+else
+   echo "$mods not found"
+   exit 1
 fi
 
 if [ -z $read_f ]; then
@@ -186,7 +200,7 @@ if [ "${cascaded}" = "yes" ]; then
 fi
 
 if [ -z $read_f ]; then
-   exit
+   exit 0
 fi
 
 #var2pep
@@ -215,7 +229,7 @@ else
          echo "$exp_d.sam looks good"
       else
          echo "empty $exp_d.sam -- the pipeline is terminated"
-         exit
+         exit 1
       fi
    fi
 
