@@ -1,1 +1,0 @@
-		PEPTIDESEQ* insert_pepseq(PEPTIDESEQ *pepseq, char *seq, int length);
